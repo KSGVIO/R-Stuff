@@ -1,7 +1,7 @@
 #ignore files: SIZE > 100MB
 #EXPECTED: A: 339.68MB B: 849.04MB C: 509.36MB D: 740.19MB E: 1.29 GB F: 230.67 MB G: 338.03 MB
 
-#GIT WILL SKIP THOSE FILES!!!!!!!
+#GIT WILL SKIP THOSE FILES!!!!!!!!
 4x-megumin-x-aqua-original-sound_1080p.mp4
 Sakura_x_Naruto_SOUND_final.mp4
 777b47d68a316b5f719a64785fa79361.mp4
