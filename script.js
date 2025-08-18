@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }else if(["mp3","wav","ogg"].includes(ext)){
       el=document.createElement("audio"); el.src=url; el.controls=true; els.preview.appendChild(el);
     }else{
-      els.preview.appendChild(document.createTextNode("No preview available for this file."));
+      els.preview.appendChild(document.createTextNode("No preview available for this file / file is corrupted."));
     }
 
     const dl=document.createElement("a");
