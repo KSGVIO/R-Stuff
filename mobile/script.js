@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loginMsg: document.getElementById("loginMsg"),
   };
 
-  // add close button
+  /// add close button
   const closeBtn = document.createElement("button");
   closeBtn.id = "closePreviewBtn";
   closeBtn.className = "close-preview hidden";
