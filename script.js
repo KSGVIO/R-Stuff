@@ -195,44 +195,89 @@ document.addEventListener("DOMContentLoaded", () => {
     const url = rawUrl(o, r, fp, b);
     const ext = fp.split(".").pop().toLowerCase();
     els.preview.innerHTML = "";
+
     let el = null;
+
+    // Create a container for the label and media
+    const container = document.createElement("div");
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
+    container.style.alignItems = "flex-start";
+    container.style.width = "100%";
+
+    // --- Add filename label ---
+    const label = document.createElement("div");
+    label.textContent = fp.split("/").pop();
+    label.style.fontWeight = "bold";
+    label.style.marginBottom = "10px";
+    label.style.textAlign = "left";
+    label.style.whiteSpace = "nowrap";
+    label.style.overflow = "hidden";
+    label.style.textOverflow = "ellipsis";
+    label.style.maxWidth = "100%";
+    // We'll set the width later to match the image/video/audio
+
+    // Helper to set label width after media loads
+    function setLabelWidth(width) {
+      label.style.maxWidth = (width - 40) + "px";
+    }
 
     if (["png", "jpg", "jpeg", "gif", "webp"].includes(ext)) {
       el = document.createElement("img");
       el.src = url;
-      els.preview.appendChild(el);
+      el.style.display = "block";
+      el.onload = function () {
+        setLabelWidth((el.naturalWidth > 400 ? 400 : el.naturalWidth));
+      };
+      container.appendChild(label);
+      container.appendChild(el);
     } else if (["mp4", "webm"].includes(ext)) {
       el = document.createElement("video");
       el.src = url;
       el.controls = true;
-      els.preview.appendChild(el);
+      el.style.display = "block";
+      el.onloadedmetadata = function () {
+        setLabelWidth((el.videoWidth > 400 ? 400 : el.videoWidth));
+      };
+      container.appendChild(label);
+      container.appendChild(el);
     } else if (["mp3", "wav", "ogg"].includes(ext)) {
       el = document.createElement("audio");
       el.src = url;
       el.controls = true;
-      els.preview.appendChild(el);
+      el.style.display = "block";
+      // For audio, just use the preview width
+      setLabelWidth(400);
+      container.appendChild(label);
+      container.appendChild(el);
     } else {
       els.preview.textContent = "No preview available for this file.";
     }
 
-    const dl = document.createElement("a");
-    dl.href = url;
-    dl.download = fp.split("/").pop();
-    dl.className = "download-btn";
-    dl.textContent = "Download";
-    dl.onclick = (e) => {
-      e.preventDefault();
-      fetch(url)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const a = document.createElement("a");
-          a.href = URL.createObjectURL(blob);
-          a.download = fp.split("/").pop();
-          a.click();
-          URL.revokeObjectURL(a.href);
-        });
-    };
-    els.preview.appendChild(dl);
+    if (el) {
+      els.preview.appendChild(container);
+    }
+
+    if (el) {
+      const dl = document.createElement("a");
+      dl.href = url;
+      dl.download = fp.split("/").pop();
+      dl.className = "download-btn";
+      dl.textContent = "Download";
+      dl.onclick = (e) => {
+        e.preventDefault();
+        fetch(url)
+          .then((res) => res.blob())
+          .then((blob) => {
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = fp.split("/").pop();
+            a.click();
+            URL.revokeObjectURL(a.href);
+          });
+      };
+      els.preview.appendChild(dl);
+    }
   }
 
   // --- Events ---
