@@ -107,23 +107,42 @@ document.addEventListener("DOMContentLoaded", () => {
     els.preview.innerHTML="";
     els.preview.appendChild(els.closePreviewBtn);
     els.closePreviewBtn.classList.remove("hidden");
-    const url=rawUrl(o,r,fp,b); const ext=fp.split(".").pop().toLowerCase();
+
+    const url=rawUrl(o,r,fp,b);
+    const ext=fp.split(".").pop().toLowerCase();
     let el=null;
-    if(["png","jpg","jpeg","gif","webp"].includes(ext)){el=document.createElement("img");el.src=url;els.preview.appendChild(el);}
-    else if(["mp4","webm"].includes(ext)){el=document.createElement("video");el.src=url;el.controls=true;els.preview.appendChild(el);}
-    else if(["mp3","wav","ogg"].includes(ext)){el=document.createElement("audio");el.src=url;el.controls=true;els.preview.appendChild(el);}
-    else {els.preview.appendChild(document.createTextNode("No preview available for this file."));}
-    const dl=document.createElement("a"); dl.href=url; dl.download=fp.split("/").pop(); dl.className="download-btn"; dl.textContent="Download";
-    dl.onclick=(e)=>{e.preventDefault();fetch(url).then(res=>res.blob()).then(blob=>{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fp.split("/").pop();a.click();URL.revokeObjectURL(a.href);});};
+
+    if(["png","jpg","jpeg","gif","webp"].includes(ext)){
+      el=document.createElement("img"); el.src=url; els.preview.appendChild(el);
+    }else if(["mp4","webm"].includes(ext)){
+      el=document.createElement("video"); el.src=url; el.controls=true; els.preview.appendChild(el);
+    }else if(["mp3","wav","ogg"].includes(ext)){
+      el=document.createElement("audio"); el.src=url; el.controls=true; els.preview.appendChild(el);
+    }else{
+      els.preview.appendChild(document.createTextNode("No preview available for this file."));
+    }
+
+    const dl=document.createElement("a");
+    dl.href=url; dl.download=fp.split("/").pop(); dl.className="download-btn"; dl.textContent="Download";
+    dl.onclick=(e)=>{ e.preventDefault();
+      fetch(url).then(res=>res.blob()).then(blob=>{
+        const a=document.createElement("a");
+        a.href=URL.createObjectURL(blob);
+        a.download=fp.split("/").pop();
+        a.click();
+        URL.revokeObjectURL(a.href);
+      });
+    };
     els.preview.appendChild(dl);
   }
 
-  // --- Close Preview button ---
+  // Close Preview
   els.closePreviewBtn.addEventListener("click",()=>{
     els.preview.innerHTML="Select a file to preview";
     els.closePreviewBtn.classList.add("hidden");
   });
 
+  // Events
   window.addEventListener("hashchange",()=>{state.path=decodeURIComponent(location.hash.replace(/^#/,''));doLoad();});
   els.search.addEventListener("input",(e)=>{state.filter=e.target.value;const {owner,repo,branch}=DEFAULTS;renderTable(owner,repo,branch);});
 
@@ -138,10 +157,8 @@ document.addEventListener("DOMContentLoaded", () => {
   els.loginPwd.addEventListener("keydown",(e)=>{if(e.key==="Enter")tryLogin();});
   els.loginUser.focus();
 
-  // --- Detect phone and suggest mobile ---
+  // Mobile heads-up (CSS handles layout; this is optional)
   if(window.innerWidth<640){
-    console.log("Phone detected: preview moves to bottom automatically by CSS.");
-    // Optionally, alert user
-    // alert("Mobile mode enabled. Preview will show at the bottom.");
+    console.log("Mobile layout active: preview will appear at the bottom.");
   }
 });
