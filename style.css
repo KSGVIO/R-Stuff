@@ -73,7 +73,7 @@ input:focus, #search:focus {
   opacity: 0.8;
 }
 
-/* ---- Buttons ---- */
+/* ---- Buttons ----- */
 button, .download-btn, .close-preview {
   border: none;
   border-radius: 12px;
