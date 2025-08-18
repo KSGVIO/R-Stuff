@@ -2,10 +2,6 @@ const DEFAULTS = { owner: "KSGVIO", repo: "R-Stuff", branch: "brenciu" };
 
 document.addEventListener("DOMContentLoaded", () => {
   // --- Mobile redirect ---
-  if (window.matchMedia("(max-width: 640px)").matches) {
-    window.location.href = "mobile.html";
-    return;
-  }
 
   const els = {
     breadcrumbs: document.getElementById("breadcrumbs"),
