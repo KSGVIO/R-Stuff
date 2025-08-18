@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>G.H.R.F.I. Mobile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Login Panel -->
+  <div id="loginPanel">
+    <div id="loginBox">
+      <h2>Login</h2>
+      <input type="text" id="loginUser" placeholder="Username" />
+      <input type="password" id="loginPwd" placeholder="Password" />
+      <button id="loginBtn">Login</button>
+      <div id="loginMsg" style="color:var(--err);font-size:12px;display:none"></div>
+    </div>
+  </div>
+
+  <main>
+    <div class="card">
+      <strong>Mobile Site</strong>
+      <div class="list">
+        <div class="toolbar">
+          <div class="crumbs" id="breadcrumbs"></div>
+          <input id="search" placeholder="Filter files… (name contains)" />
+          <button><a class="btn" href="https://github.com/KSGVIO/R-Stuff/archive/refs/heads/brenciu.zip">Download all (~6.1 GB)</a></button>
+        </div>
+
+        <div id="notice" class="notice hidden"></div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Name - Phone</th>
+              <th>Type</th>
+              <th>Size</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+
+        <div class="footer">
+          <div class="status" id="status"><span class="dot warn"></span> Ready</div>
+          <a class="btn ghost" id="githubLink" href="#" target="_blank">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview" id="preview">
+      <button id="closePreviewBtn" class="close-preview hidden">✕ Close</button>
+      Select a file to preview
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

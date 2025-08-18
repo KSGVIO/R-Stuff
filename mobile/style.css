@@ -181,11 +181,6 @@ tr:hover { background: #0f1623; }
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow: -4px 0 12px rgba(0,0,0,0.3);
-  position: sticky;
-  top: 24px;
-  align-self: flex-start;
-  max-height: calc(100vh - 48px);
-  z-index: 10;
 }
 .preview img, .preview video {
   max-width: 100%;
