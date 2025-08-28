@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
       el=document.createElement("img"); el.src=url;
       el.onload=()=>{ setLabelWidth(el.naturalWidth>400?400:el.naturalWidth); };
       els.preview.appendChild(el);
-    } else if(["mp4","webm"].includes(ext)){
+    } else if(["mp4","webm","mov"].includes(ext)){ // <-- added "mov"
       el=document.createElement("video"); el.src=url; el.controls=true;
       el.onloadedmetadata=()=>{ setLabelWidth(el.videoWidth>400?400:el.videoWidth); };
       els.preview.appendChild(el);
