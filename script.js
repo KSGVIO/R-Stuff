@@ -132,46 +132,77 @@ document.addEventListener("DOMContentLoaded", () => {
   function navigate(path){ state.path=path||""; location.hash=encodeURIComponent(state.path); doLoad(); }
   function doLoad(){ const {owner,repo,branch}=DEFAULTS; fetchContents(owner,repo,state.path,branch); }
 
-  function showPreview(o,r,b,fp){
-    const url=rawUrl(o,r,fp,b);
-    const ext=fp.split(".").pop().toLowerCase();
-    els.preview.innerHTML="";
+  function showPreview(o, r, b, fp) {
+    const url = rawUrl(o, r, fp, b);
+    const ext = fp.split(".").pop().toLowerCase();
+    els.preview.innerHTML = "";
     els.preview.appendChild(els.closePreviewBtn);
     els.closePreviewBtn.classList.remove("hidden");
 
     // filename label
-    const label=document.createElement("div");
-    label.className="preview-filename";
-    label.textContent=fp.split("/").pop();
+    const label = document.createElement("div");
+    label.className = "preview-filename";
+    label.textContent = fp.split("/").pop();
     els.preview.appendChild(label);
 
-    let el=null;
-    const setLabelWidth=w=>{ label.style.maxWidth=(w+40)+"px"; };
+    let el = null;
+    const setLabelWidth = w => { label.style.maxWidth = (w + 40) + "px"; };
 
-    if(["png","jpg","jpeg","gif","webp"].includes(ext)){
-      el=document.createElement("img"); el.src=url;
-      el.onload=()=>{ setLabelWidth(el.naturalWidth>400?400:el.naturalWidth); };
+    if (["png", "jpg", "jpeg", "gif", "webp"].includes(ext)) {
+      el = document.createElement("img"); el.src = url;
+      el.onload = () => { setLabelWidth(el.naturalWidth > 400 ? 400 : el.naturalWidth); };
       els.preview.appendChild(el);
-    } else if(["mp4","webm","mov"].includes(ext)){ // <-- added "mov"
-      el=document.createElement("video"); el.src=url; el.controls=true;
-      el.onloadedmetadata=()=>{ setLabelWidth(el.videoWidth>400?400:el.videoWidth); };
+    } else if (["mp4", "webm", "mov"].includes(ext)) {
+      el = document.createElement("video"); el.src = url; el.controls = true;
+      el.onloadedmetadata = () => { setLabelWidth(el.videoWidth > 400 ? 400 : el.videoWidth); };
       els.preview.appendChild(el);
-    } else if(["mp3","wav","ogg"].includes(ext)){
-      el=document.createElement("audio"); el.src=url; el.controls=true;
+    } else if (["mp3", "wav", "ogg"].includes(ext)) {
+      el = document.createElement("audio"); el.src = url; el.controls = true;
       setLabelWidth(400); els.preview.appendChild(el);
     } else {
-      els.preview.textContent="No preview available for this file.";
+      // No preview available
+      els.preview.textContent = "";
+      els.preview.appendChild(els.closePreviewBtn);
+
+      // filename label + "View Raw" button
+      const labelWrap = document.createElement("div");
+      labelWrap.style.display = "flex";
+      labelWrap.style.alignItems = "center";
+      labelWrap.style.gap = "10px";
+
+      const labelText = document.createElement("span");
+      labelText.className = "preview-filename";
+      labelText.textContent = fp.split("/").pop();
+
+      const viewRawBtn = document.createElement("a");
+      viewRawBtn.href = url;
+      viewRawBtn.target = "_blank";
+      viewRawBtn.rel = "noopener";
+      viewRawBtn.className = "download-btn";
+      viewRawBtn.textContent = "View Raw";
+
+      labelWrap.appendChild(labelText);
+      labelWrap.appendChild(viewRawBtn);
+
+      els.preview.appendChild(labelWrap);
+
+      const noPrev = document.createElement("div");
+      noPrev.textContent = "No preview available for this file.";
+      noPrev.style.marginTop = "12px";
+      els.preview.appendChild(noPrev);
+      return;
     }
 
-    if(el){
-      const dl=document.createElement("a");
-      dl.href=url; dl.download=fp.split("/").pop();
-      dl.className="download-btn"; dl.textContent="Download";
-      dl.onclick=(e)=>{ e.preventDefault();
-        fetch(url).then(res=>res.blob()).then(blob=>{
-          const a=document.createElement("a");
-          a.href=URL.createObjectURL(blob);
-          a.download=fp.split("/").pop(); a.click();
+    if (el) {
+      const dl = document.createElement("a");
+      dl.href = url; dl.download = fp.split("/").pop();
+      dl.className = "download-btn"; dl.textContent = "Download";
+      dl.onclick = (e) => {
+        e.preventDefault();
+        fetch(url).then(res => res.blob()).then(blob => {
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = fp.split("/").pop(); a.click();
           URL.revokeObjectURL(a.href);
         });
       };
