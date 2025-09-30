@@ -181,11 +181,21 @@ document.addEventListener("DOMContentLoaded", () => {
   els.closePreviewBtn.addEventListener("click",()=>{ els.preview.innerHTML="Select a file to preview"; });
 
   // login
-  function tryLogin(){
-    const u=(els.loginUser.value||"").trim(), p=(els.loginPwd.value||"").trim();
-    if(u==="bunica"&&p==="babacloanta"){ els.loginMsg.style.display="none"; els.loginPanel.style.display="none"; doLoad(); }
-    else { els.loginMsg.style.display="block"; els.loginMsg.textContent="Invalid credentials"; }
+ 
+function tryLogin() {
+  const u = (els.loginUser.value || "").trim();
+  const p = (els.loginPwd.value || "").trim();
+
+  if (u.toLowerCase() === "bunica" && p === "babacloanta") {
+    els.loginMsg.style.display = "none";
+    els.loginPanel.style.display = "none";
+    doLoad(); // load repo contents after successful login
+  } else {
+    els.loginMsg.style.display = "block";
+    els.loginMsg.textContent = "Invalid credentials";
   }
+}
+
   els.loginBtn.addEventListener("click",tryLogin);
   els.loginUser.addEventListener("keydown",e=>{ if(e.key==="Enter") tryLogin(); });
   els.loginPwd.addEventListener("keydown",e=>{ if(e.key==="Enter") tryLogin(); });
